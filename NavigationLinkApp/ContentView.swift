@@ -10,8 +10,18 @@ import SwiftUI
 
 
 struct DetailView: View {
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
-        Text("This is the detail view")
+        
+        VStack {
+            Text("This is the detail view")
+            Button("Back") {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        }
+
+            
+            
     }
 }
 
@@ -29,6 +39,12 @@ struct DogRow: View {
     }
 }
 
+struct DetailView2: View {
+    var body: some View {
+        Text("Detail")
+    }
+}
+
 struct DogView: View {
     var dog: Dog
     var body: some View {
@@ -39,15 +55,14 @@ struct DogView: View {
 
 
 struct ContentView: View {
+    @State private var showingDetail = false
     var body: some View {
-        let first = Dog(name: "Sobaka")
-        let dogs = [first]
-        
-        return NavigationView {
-            List(dogs) { dog in
-                NavigationLink(destination: DogView(dog: dog))
-                    { DogRow(dog: dog) }
-            }.navigationBarTitle("Choose a dog")
+        Button(action: {
+            self.showingDetail.toggle()
+        }) {
+            Text("Show detail")
+        } .sheet(isPresented: $showingDetail) {
+            DetailView()
         }
     }
 }
